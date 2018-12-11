@@ -27,7 +27,7 @@ export function RowProgram(json) {
 }
 export function RowParserExpression(json) {
     if (json.type == 'BinaryExpression') {
-        return RowParserExpression(json.left) + ' ' + json.operator + ' ' + RowParserExpression(json.right);
+        return '('+ RowParserExpression(json.left) + ' ' + json.operator + ' ' + RowParserExpression(json.right)+')';
     }
     if (json.type == 'Identifier') {
         return json.name;
@@ -51,13 +51,24 @@ export function RowParserExpression3(json){
 
 export function RowExpressionStatement(json) {
     if(json.expression.type == 'AssignmentExpression') {
-        results.push({
-            line: json.loc.start.line,
-            type: 'assignment expression',
-            name: json.expression.left.name,
-            condition: '',
-            value: RowParserExpression(json.expression.right)
-        });
+        if(json.expression.left.name) {
+            results.push({
+                line: json.loc.start.line,
+                type: 'assignment expression',
+                name: json.expression.left.name,
+                condition: '',
+                value: RowParserExpression(json.expression.right)
+            });
+        }
+        else{
+            results.push({
+                line: json.loc.start.line,
+                type: 'assignment expression',
+                name: RowParserExpression(json.expression.left),
+                condition: '',
+                value: RowParserExpression(json.expression.right)
+            });
+        }
     }
     else if (json.expression.type == 'UpdateExpression'){
         results.push({
@@ -137,7 +148,7 @@ export function RowForStatement(json){
         line: json.loc.start.line,
         type: 'for statement',
         name: '',
-        condition: RowParserExpression(json.init)+' '+RowParserExpression(json.test)+' '+RowParserExpression(json.update),
+        condition: RowParserExpression(json.init)+';'+' '+RowParserExpression(json.test)+';'+' '+RowParserExpression(json.update),
         value: ''
     });
     resolveElements(json.body);

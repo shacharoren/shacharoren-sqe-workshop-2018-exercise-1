@@ -62,7 +62,7 @@ describe('The javascript parser', () => {
         let expected = [
             {line: 1, type: 'variable declaration', name: 'a', condition: '', value: ''},
             {line: 2, type: 'variable declaration', name: 'b', condition: '', value: ''},
-            {line: 3, type: 'variable declaration', name: 'c', condition: '', value: 'a + b'}
+            {line: 3, type: 'variable declaration', name: 'c', condition: '', value: '(a + b)'}
         ];
         resolveElements(json);
         assert.deepEqual(results, expected);
@@ -80,7 +80,7 @@ describe('The javascript parser', () => {
             '}'
         );
         let expected = [
-            {line: 1, type: 'while statement', name: '', condition: 'x < 2', value: ''},
+            {line: 1, type: 'while statement', name: '', condition: '(x < 2)', value: ''},
             {line: 2, type: 'assignment expression', name: 'i', condition: '', value: '1'},
         ];
         resolveElements(json);
@@ -97,7 +97,7 @@ describe('The javascript parser', () => {
             'mid = (low + high)/2;\n'
         );
         let expected = [
-            {line: 1, type: 'assignment expression', name: 'mid', condition: '', value: 'low + high / 2'},
+            {line: 1, type: 'assignment expression', name: 'mid', condition: '', value: '((low + high) / 2)'},
         ];
         resolveElements(json);
         assert.deepEqual(results, expected);
@@ -196,7 +196,7 @@ describe('The javascript parser', () => {
             {line: 2, type: 'variable declaration', name: 'low', condition: '', value: ''},
             {line: 2, type: 'variable declaration', name: 'high', condition: '', value: ''},
             {line: 3, type: 'assignment expression', name: 'low', condition: '', value: '0'},
-            {line: 4, type: 'assignment expression', name: 'high', condition: '', value: 'n - 1'}
+            {line: 4, type: 'assignment expression', name: 'high', condition: '', value: '(n - 1)'}
         ];
         resolveElements(json);
         assert.deepEqual(results, expected);});});
@@ -287,7 +287,7 @@ describe('The javascript parser', () => {
             'for(i=0;i<10;i++){}'
         );
         let expected = [
-            {line: 1, type: 'for statement', name: '', condition: 'i = 0 i < 10 i++', value: ''},
+            {line: 1, type: 'for statement', name: '', condition: 'i = 0; (i < 10); i++', value: ''},
         ];
         resolveElements(json);
         assert.deepEqual(results, expected);
@@ -304,7 +304,7 @@ describe('The javascript parser', () => {
             '{++x;--x}'
         );
         let expected = [
-            {line: 1, type: 'while statement', name: '', condition: 'x > 3', value: ''},
+            {line: 1, type: 'while statement', name: '', condition: '(x > 3)', value: ''},
             {line: 2, type: 'update expression', name: '', condition: '', value: '++x'},
             {line: 2, type: 'update expression', name: '', condition: '', value: '--x'},
 
