@@ -46,31 +46,21 @@ export function RowParserExpression2(json){
     return RowParserExpression3(json);
 }
 export function RowParserExpression3(json){
-    if(json.type =='UpdateExpression'){let x = json.prefix ? json.operator+''+json.argument.name : json.argument.name+''+json.operator;return x;}
+    //if(json.type =='UpdateExpression'){
+    let x = json.prefix ? json.operator+''+json.argument.name : json.argument.name+''+json.operator;return x;
 }
 
 export function RowExpressionStatement(json) {
     if(json.expression.type == 'AssignmentExpression') {
-        if(json.expression.left.name) {
-            results.push({
-                line: json.loc.start.line,
-                type: 'assignment expression',
-                name: json.expression.left.name,
-                condition: '',
-                value: RowParserExpression(json.expression.right)
-            });
-        }
-        else{
-            results.push({
-                line: json.loc.start.line,
-                type: 'assignment expression',
-                name: RowParserExpression(json.expression.left),
-                condition: '',
-                value: RowParserExpression(json.expression.right)
-            });
-        }
+        //if(json.expression.left.name) {
+        results.push({
+            line: json.loc.start.line,
+            type: 'assignment expression',
+            name: json.expression.left.name,
+            condition: '',
+            value: RowParserExpression(json.expression.right)});
     }
-    else if (json.expression.type == 'UpdateExpression'){
+    else{
         results.push({
             line: json.loc.start.line,
             type: 'update expression',
